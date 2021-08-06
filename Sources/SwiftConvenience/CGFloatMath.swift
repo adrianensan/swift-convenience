@@ -7,10 +7,10 @@
 
 import SpriteKit
 
-extension CGFloat {
+public extension CGFloat {
   var normalized: CGFloat { self < 0 ? -1 : 1 }
 }
 
-extension Int {
+public extension Int {
   var normalized: Int { self < 0 ? -1 : 1 }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-extension Array {
+public extension Array {
   init(repeating: [Element], count: Int) {
     self.init([[Element]](repeating: repeating, count: count).flatMap{$0})
   }
@@ -10,7 +10,7 @@ extension Array {
   }
 }
 
-extension ArraySlice {
+public extension ArraySlice {
   func repeated(count: Int) -> [Element] {
     return [Element](repeating: [Element](self), count: count)
   }

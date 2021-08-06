@@ -1,6 +1,6 @@
 import SpriteKit
 
-extension CGPoint {
+public extension CGPoint {
   
   static prefix func -(point: CGPoint) -> CGPoint {
     point * -1

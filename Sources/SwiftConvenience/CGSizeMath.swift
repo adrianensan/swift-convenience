@@ -1,6 +1,6 @@
 import SpriteKit
 
-extension CGSize {
+public extension CGSize {
   
   var diagonal: CGFloat { sqrt(width * width + height * height) }
   

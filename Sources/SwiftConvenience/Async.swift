@@ -1,6 +1,6 @@
 import Foundation
 
-func dispatchMain(execute work: @escaping @convention(block) () -> Void) {
+public func dispatchMain(execute work: @escaping @convention(block) () -> Void) {
   if Thread.isMainThread {
     work()
   } else {
@@ -10,17 +10,17 @@ func dispatchMain(execute work: @escaping @convention(block) () -> Void) {
   }
 }
 
-func dispatchMain(delay: TimeInterval, execute work: @escaping @convention(block) () -> Void) {
+public func dispatchMain(delay: TimeInterval, execute work: @escaping @convention(block) () -> Void) {
   DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work)
 }
 
-func dispatchMainAsync(execute work: @escaping @convention(block) () -> Void) {
+public func dispatchMainAsync(execute work: @escaping @convention(block) () -> Void) {
   DispatchQueue.main.async {
     work()
   }
 }
 
-func dispatchConcurrent(execute work: @escaping @convention(block) () -> Void) {
+public func dispatchConcurrent(execute work: @escaping @convention(block) () -> Void) {
   DispatchQueue.global(qos: .userInitiated).async {
     work()
   }

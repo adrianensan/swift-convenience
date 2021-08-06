@@ -1,7 +1,7 @@
 import Foundation
 
-extension StringProtocol {
-  public subscript(i: Int) -> Character {
+public extension StringProtocol {
+  subscript(i: Int) -> Character {
     self[index(startIndex, offsetBy: i)]
   }
   
@@ -15,28 +15,28 @@ extension StringProtocol {
     return distance(from: startIndex, to: range.lowerBound)
   }
   
-  public subscript(range: PartialRangeFrom<Int>) -> SubSequence {
+  subscript(range: PartialRangeFrom<Int>) -> SubSequence {
     self[index(startIndex, offsetBy: range.lowerBound)...]
   }
   
-  public subscript(range: PartialRangeUpTo<Int>) -> SubSequence {
+  subscript(range: PartialRangeUpTo<Int>) -> SubSequence {
     self[..<index(startIndex, offsetBy: range.upperBound)]
   }
   
-  public subscript(range: PartialRangeThrough<Int>) -> SubSequence {
+  subscript(range: PartialRangeThrough<Int>) -> SubSequence {
     self[...index(startIndex, offsetBy: range.upperBound)]
   }
   
-  public subscript(range: CountableClosedRange<Int>) -> SubSequence {
+  subscript(range: CountableClosedRange<Int>) -> SubSequence {
     self[index(startIndex, offsetBy: range.lowerBound)...index(startIndex, offsetBy: range.upperBound)]
   }
   
-  public subscript(range: CountableRange<Int>) -> SubSequence {
+  subscript(range: CountableRange<Int>) -> SubSequence {
     self[index(startIndex, offsetBy: range.lowerBound)..<index(startIndex, offsetBy: range.upperBound)]
   }
 }
 
-extension String {
+public extension String {
   func deletingPrefix(_ prefix: String) -> String {
     guard self.hasPrefix(prefix) else { return self }
     return String(dropFirst(prefix.count))
