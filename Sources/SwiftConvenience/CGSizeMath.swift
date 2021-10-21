@@ -6,6 +6,8 @@ public extension CGSize {
   
   var minSide: CGFloat { min(width, height) }
   
+  var maxSide: CGFloat { max(width, height) }
+  
   var center: CGPoint { CGPoint(x: 0.5 * width, y: 0.5 * height) }
   
   var centeredRect: CGRect { CGRect(origin: center, size: self) }
@@ -22,6 +24,10 @@ public extension CGSize {
   
   static func *(left: CGSize, right: CGSize) -> CGSize {
     CGSize(width: left.width * right.width, height: left.height * right.height)
+  }
+  
+  static func /(left: CGSize, right: CGSize) -> CGSize {
+    CGSize(width: left.width / right.width, height: left.height / right.height)
   }
   
   static func *(left: CGSize, right: CGFloat) -> CGSize {
