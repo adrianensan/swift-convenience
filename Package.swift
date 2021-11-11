@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftConvenience",
+    platforms: [.iOS(.v15), .macOS(.v12), .tvOS(.v15), .watchOS(.v8), .macCatalyst(.v15)],
     products: [
       .library(
         name: "SwiftConvenience",
@@ -10,11 +11,10 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "SwiftConvenience",
-            dependencies: []),
+            dependencies: [],
+            swiftSettings: [.define("APPLICATION_EXTENSION_API_ONLY")]),
         .testTarget(
             name: "SwiftConvenienceTests",
             dependencies: ["SwiftConvenience"]),
