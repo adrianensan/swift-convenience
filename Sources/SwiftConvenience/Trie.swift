@@ -17,14 +17,14 @@ extension Character: Codable {
 
 public class TrieNode<T: Codable & Hashable>: Codable {
   public private(set) var value: [T]
-  public private(set) var map: [Character: TrieNode]
+  public private(set) var map: [UInt8: TrieNode]
   
   public static func constructFrom(valuesMap: [String: T]) -> TrieNode {
     let root = TrieNode()
     
     for (key, value) in valuesMap {
       var currentNode: TrieNode = root
-      for character in key {
+      for character in key.utf8 {
         if let node = currentNode.map[character] {
           currentNode = node
           continue
@@ -34,7 +34,9 @@ public class TrieNode<T: Codable & Hashable>: Codable {
           currentNode = newNode
         }
       }
-      currentNode.value = [value]
+      if !currentNode.value.contains(value) {
+        currentNode.value.append(value)
+      }
     }
     
     return root
@@ -56,16 +58,19 @@ public class TrieNode<T: Codable & Hashable>: Codable {
   
   required public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: TrieCodingKeys.self)
-    if let goodMap = try? values.decode([Character: TrieNode].self, forKey: .map) {
+    if let goodMap = try? values.decode([UInt8: TrieNode].self, forKey: .map) {
       map = goodMap
+    } else if let oldMap = try? values.decode([Character: TrieNode].self, forKey: .map) {
+      map = [:]
+      for (key, val) in oldMap {
+        map[key.utf8.first!] = val
+      }
     } else {
       let oldMap = try values.decode([String: TrieNode].self, forKey: .map)
       map = [:]
       for (key, val) in oldMap {
-        print(key)
-        map[Character(key)] = val
+        map[key.utf8.first!] = val
       }
-      
     }
     value = try values.decode([T].self, forKey: .value)
   }
@@ -80,7 +85,7 @@ public class TrieNode<T: Codable & Hashable>: Codable {
     for key in keys {
       let key = key.lowercased()
       var currentNode: TrieNode = self
-      for character in key {
+      for character in key.utf8 {
         if let node = currentNode.map[character] {
           currentNode = node
           continue
@@ -100,7 +105,7 @@ public class TrieNode<T: Codable & Hashable>: Codable {
   
   public func traverse(searchTerm: String) -> TrieNode? {
     var node: TrieNode? = self
-    for character in searchTerm {
+    for character in searchTerm.utf8 {
       node = node?.map[character]
     }
     return node
