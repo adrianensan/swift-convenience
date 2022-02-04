@@ -16,7 +16,7 @@ extension Character: Codable {
 }
 
 public class TrieNode<T: Codable & Hashable>: Codable {
-  public private(set) var value: [T]
+  public private(set) var value: T?
   public private(set) var map: [UInt8: TrieNode]
   
   public static func constructFrom(valuesMap: [String: T]) -> TrieNode {
@@ -34,20 +34,14 @@ public class TrieNode<T: Codable & Hashable>: Codable {
           currentNode = newNode
         }
       }
-      if !currentNode.value.contains(value) {
-        currentNode.value.append(value)
-      }
+      currentNode.value = value
     }
     
     return root
   }
   
   public init(value: T? = nil) {
-    if let value = value {
-      self.value = [value]
-    } else {
-      self.value = []
-    }
+    self.value = value
     self.map = [:]
   }
   
@@ -72,7 +66,11 @@ public class TrieNode<T: Codable & Hashable>: Codable {
         map[key.utf8.first!] = val
       }
     }
-    value = try values.decode([T].self, forKey: .value)
+    if let values = try? values.decode([T].self, forKey: .value), let value = values.first {
+      self.value = value
+    } else {
+      value = try? values.decode(T.self, forKey: .value)
+    }
   }
   
   public func encode(to encoder: Encoder) throws {
@@ -95,7 +93,7 @@ public class TrieNode<T: Codable & Hashable>: Codable {
           currentNode = newNode
         }
       }
-      currentNode.value.append(value)
+      currentNode.value = value
     }
   }
   
@@ -112,7 +110,10 @@ public class TrieNode<T: Codable & Hashable>: Codable {
   }
   
   public func searchAllTrie() -> Set<T> {
-    var results: Set<T> = Set(value)
+    var results: Set<T> = Set()
+    if let value = value {
+      results.insert(value)
+    }
     
     for node in self.map.values {
       results.formUnion(node.searchAllTrie())
