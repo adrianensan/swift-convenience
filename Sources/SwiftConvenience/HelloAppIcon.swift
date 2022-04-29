@@ -1,10 +1,28 @@
 import SwiftUI
 
+public protocol AppIconExportable: Identifiable, CaseIterable {
+  
+  static var defaultIcon: Self { get }
+  
+  var name: String { get }
+  
+  var view: AnyView { get }
+  
+  var imageName: String { get }
+}
+
+public extension AppIconExportable {
+  var id: String { imageName }
+  
+  static var allIcons: [Self] { Array(allCases) }
+}
+
+
 public protocol HelloMacAppIcon: HelloAppIcon {
   var isPreMasked: Bool { get }
 }
 
-public protocol HelloAppIcon: Identifiable, Codable, CaseIterable, Equatable {
+public protocol HelloAppIcon: AppIconExportable, Codable, Equatable {
   
   init?(rawValue: String)
   
@@ -36,8 +54,6 @@ public extension HelloAppIcon {
     default: return imageName
     }
   }
-  
-  static var allIcons: [Self] { Array(allCases) }
   
   static func infer(from systemName: String?) -> Self {
     if let systemName = systemName {
